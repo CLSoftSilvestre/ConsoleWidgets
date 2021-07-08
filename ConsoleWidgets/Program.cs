@@ -159,9 +159,23 @@ namespace ConsoleWidgets
         static void VerOpcao3(Screen e)
         {
             //Apresentar uma MsgBox (No caso das MsgBox não necessita de adicionar ao Screen. O processo é feito automaticamente pelo metodo Show)
-            MsgBox mb1 = new MsgBox("Atenção!", "A opção 3 ainda não está definida!");
-            mb1.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
-            mb1.Show(e);
+            //MsgBox mb1 = new MsgBox("Atenção!", "A opção 3 ainda não está definida!");
+            //mb1.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
+            //mb1.Show(e);
+
+            Table tbl1 = new Table(80, 20, e);
+            tbl1.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
+            tbl1.AddColumn(20, "Nome");
+            tbl1.AddColumn(40, "Morada");
+            tbl1.AddColumn(20, "Telefone");
+
+            e.Add(tbl1);
+            e.Render();
+
+            Console.ReadKey();
+
+            tbl1.Dispose(e);
+            e.Render();
 
         }
     }
