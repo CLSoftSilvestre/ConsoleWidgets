@@ -23,7 +23,10 @@ namespace Widgets
 
         private void Position(int x, int y, ScreenUnit value)
         {
-            _scrBuffer[x, y] = value;
+            if( x <= Width && y <= Height)
+            {
+                _scrBuffer[x, y] = value;
+            } 
         }
 
         public void DrawBox(int x, int y, int l, int h, ConsoleColor color, BorderType border, ConsoleColor backcolor)
@@ -282,6 +285,49 @@ namespace Widgets
                             tmp.TextColor = color;
                             tmp.BackColor = backcolor;
                             Position(a, y, tmp);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void DrawVertSepLine(int x, int y, int h, ConsoleColor color, BorderType border, ConsoleColor backcolor)
+        {
+            switch (border)
+            {
+                case BorderType.Single:
+                    for (int a = y; a < y + h; a++)
+                    {
+                        ScreenUnit tmp = new ScreenUnit('\0', ConsoleColor.Black);
+                        if (a == y)
+                        {
+                            tmp.Text = '┬';
+                            tmp.TextColor = color;
+                            tmp.BackColor = backcolor;
+                            Position(x, a, tmp);
+                        }
+                        else if (a == y + h - 1)
+                        {
+                            tmp.Text = '┴';
+                            tmp.TextColor = color;
+                            tmp.BackColor = backcolor;
+                            Position(x, a, tmp);
+                        }
+                        else if ( a == y + 2)
+                        {
+                            tmp.Text = '┼';
+                            tmp.TextColor = color;
+                            tmp.BackColor = backcolor;
+                            Position(x, a, tmp);
+                        }
+                        else
+                        {
+                            tmp.Text = '│';
+                            tmp.TextColor = color;
+                            tmp.BackColor = backcolor;
+                            Position(x, a, tmp);
                         }
                     }
                     break;

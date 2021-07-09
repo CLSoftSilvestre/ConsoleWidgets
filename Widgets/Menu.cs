@@ -63,8 +63,6 @@ namespace Widgets
                     case ConsoleKey.Enter:
                         //Retorna o valor selecionado
                         return Items[_selPos - 1];
-                    case ConsoleKey.Escape:
-                        return null;
                 }
 
                 Draw(parentScreen);
@@ -72,5 +70,28 @@ namespace Widgets
                 
             }
         }
+    }
+
+    public class MenuItem
+    {
+        public string Text { get; set; }
+
+        public event EventHandler Selected;
+
+        public MenuItem(string text)
+        {
+            Text = text;
+        }
+
+        public void Select()
+        {
+            OnSelectedItem(EventArgs.Empty);
+        }
+
+        protected virtual void OnSelectedItem(EventArgs e)
+        {
+            Selected?.Invoke(this, e);
+        }
+
     }
 }
