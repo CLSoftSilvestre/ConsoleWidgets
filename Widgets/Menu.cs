@@ -9,16 +9,17 @@ namespace Widgets
     public class Menu : Widget
     {
         public string Title { get; set; }
-        public List<string> Items { get; set; }
+        //public List<string> Items { get; set; }
+        public List<MenuItem> Itens { get; set; } 
 
         private int _selPos = 1;
 
         private Screen parentScreen = new Screen();
 
-        public Menu(string title, List<string> items)
+        public Menu(string title, List<MenuItem> itens)
         {
             Title = title;
-            Items = items;
+            Itens = itens;
         }
 
         public override void Draw(Screen e)
@@ -33,13 +34,13 @@ namespace Widgets
             e.DrawText(55, 11, Title.ToUpper(), FontColor, BackgroundColor);
             //Desenhar opções do menu (Vai ser alterado para componente Widget)
             int pos = 12;
-            foreach (var item in Items)
+            foreach (var item in Itens)
             {
                 pos += 1;
                 if (pos-12 == _selPos)
-                    e.DrawText(45, pos, item, BackgroundColor, FontColor);
+                    e.DrawText(45, pos, item.Text, BackgroundColor, FontColor);
                 else
-                    e.DrawText(45, pos, item, FontColor, BackgroundColor);
+                    e.DrawText(45, pos, item.Text, FontColor, BackgroundColor);
             }
 
             e.DrawText(38, 18, "Utilize as setas ↑↓ e selecione com <Enter>", FontColor, BackgroundColor);
@@ -53,7 +54,7 @@ namespace Widgets
                 switch (key)
                 {
                     case ConsoleKey.DownArrow:
-                        if (_selPos < Items.Count)
+                        if (_selPos < Itens.Count)
                             _selPos += 1;
                         break;
                     case ConsoleKey.UpArrow:
@@ -62,7 +63,9 @@ namespace Widgets
                         break;
                     case ConsoleKey.Enter:
                         //Retorna o valor selecionado
-                        return Items[_selPos - 1];
+                        Itens[_selPos - 1].Select();
+                        break;
+                        //return Itens[_selPos - 1].Text;
                 }
 
                 Draw(parentScreen);

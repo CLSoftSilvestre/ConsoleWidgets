@@ -6,13 +6,14 @@ namespace ConsoleWidgets
 {
     class Program
     {
+        static Screen e;
 
         static void Main(string[] args)
         {
             // Cria um novo ecra de dimensoes 120 colunas x 30 linhas (Tamanho standard e limpa o mesmo)
             // Isto faz com que a escrita no ecra seja controlada por uma classe que contem um duplo buffer para
             // permitir voltar atraz no desenho (por exemplo quando aparece e depois desaparece uma MsgBox.
-            Screen e = new Screen(120, 30);
+            e = new Screen(120, 30);
             e.Clear();
 
             // Desenhar o background geral no ecra todo
@@ -21,15 +22,32 @@ namespace ConsoleWidgets
             e.Add(bg1);
 
             // Lista de items do menu (TODO: neste momento limitado a um máximo 4 opcoes)
-            // No futuro irei adicionar uma nova classe MenuItem que irá conter não só o texto como os eventos em caso de selecção
-            List<string> menuItems = new List<string>();
-            menuItems.Add("Novo cliente");
-            menuItems.Add("Visualizar clientes");
-            menuItems.Add("Opção 3");
-            menuItems.Add("Sair da aplicação");
+            List<MenuItem> menuItens = new List<MenuItem>();
+
+            // Cria um novo MenuItem
+            MenuItem NovoCliente = new MenuItem("Novo cliente");
+            // Adiciona o método correspondente ao Evento Selected
+            NovoCliente.Selected += NovoCliente_OnSelectedItem;
+            // Adiciona o MenuItem à lista de Itens que irá ser adicionada ao Menu
+            menuItens.Add(NovoCliente);
+
+            // Criar item de menu e adicionar à lista e atribuir evento
+            MenuItem VisualizarCliente = new MenuItem("Visualizar clientes");
+            VisualizarCliente.Selected += VisualizarCliente_OnSelectedItem;
+            menuItens.Add(VisualizarCliente);
+
+            // Criar item de menu e adicionar à lista e atribuir evento
+            MenuItem Opcao3 = new MenuItem("Opção 3");
+            Opcao3.Selected += Opcao3_OnSelectedItem;
+            menuItens.Add(Opcao3);
+
+            // Criar item de menu e adicionar à lista e atribuir evento
+            MenuItem Sair = new MenuItem("Sair da aplicação");
+            Sair.Selected += Sair_OnSelectedItem;
+            menuItens.Add(Sair);
 
             // Criar um menu adicionar a lista de items.
-            Menu mnu = new Menu("Menu de teste", menuItems);
+            Menu mnu = new Menu("Menu de teste", menuItens);
             // Define as cores a utilizar pelo Menu
             mnu.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
             // Adiciona o Menu criado ao objecto Screen geral
@@ -40,38 +58,13 @@ namespace ConsoleWidgets
             // Excepto em situações em que o proprio componente (Widget) o faz (por exemplo os métodos Select ou MsgBox.Show())
             e.Render();
 
-            // Efetuar a derivação para os metodos correspondentes de acordo com a escolha do menu
-            // No futuro irá ser alterado para eventos, contudo para já podemos criar um loop que aguarda a selecção
-            // de algum item do menu e retorna o seu Texto...
-            // Este torna-se o Loop principal da aplicação uma vez que todos os metodos regressam aqui...
-            string selecionado = new string("");
-            while (selecionado != null && selecionado != "Sair da aplicação")
-            {
-                selecionado = mnu.Select();
-
-                switch (selecionado)
-                {
-                    case "Novo cliente":
-                        NovoUtilizador(e);
-                        break;
-                    case "Visualizar clientes":
-                        VerUtilizadores(e);
-                        break;
-                    case "Opção 3":
-                        VerOpcao3(e);
-                        break;
-                    case "Sair da aplicação":
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-
-            //Fim da aplicação
+            // Ativa o menu para podermos selecionar o item.
+            // A partir daqui será chamado o evento do MenuItem chamará o método correspondente
+            mnu.Select();
         }
 
-        static void NovoUtilizador(Screen e)
+        //Event Handlers
+        public static void NovoCliente_OnSelectedItem(object sender, EventArgs ev)
         {
             //Criar uma Form e adicionar controlos a esta Form
             Form frm1 = new Form(100, 20, "Novo cliente", e);
@@ -133,7 +126,7 @@ namespace ConsoleWidgets
             e.Render();
         }
 
-        static void VerUtilizadores(Screen e)
+        public static void VisualizarCliente_OnSelectedItem(object sender, EventArgs ev)
         {
             //Criar uma Form e adicionar controlos a esta Form
             Form frm1 = new Form(110, 25, "Visualizar clientes", e);
@@ -184,10 +177,10 @@ namespace ConsoleWidgets
 
             // Gestão da alternação entre botoes e resposta
             string resp = new string("");
-            while(resp != "OK" && resp != "Cancelar")
+            while (resp != "OK" && resp != "Cancelar")
             {
                 resp = btn1.Select();
-                if(resp != "OK")
+                if (resp != "OK")
                     resp = btn2.Select();
             }
 
@@ -195,12 +188,18 @@ namespace ConsoleWidgets
             e.Render();
         }
 
-        static void VerOpcao3(Screen e)
+        public static void Opcao3_OnSelectedItem(object sender, EventArgs ev)
         {
             //Apresentar uma MsgBox (No caso das MsgBox não necessita de adicionar ao Screen. O processo é feito automaticamente pelo metodo Show)
             MsgBox mb1 = new MsgBox("Atenção!", "A opção 3 ainda não está definida!");
             mb1.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
             mb1.Show(e);
+        }
+
+        public static void Sair_OnSelectedItem(object sender, EventArgs ev)
+        {
+            //Termina a aplicação
+            Environment.Exit(0); 
         }
     }
 }
