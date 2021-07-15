@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Celso Silvestre</Authors>
+    <Company>Azordev.pt</Company>
+    <Copyright>Copyright (c) 2021 Azordev.pt</Copyright>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.1</Version>
+    <Description>Widgets classes for using in console applications</Description>
+    <RepositoryUrl>https://github.com/CLSoftSilvestre/ConsoleWidgets.git</RepositoryUrl>
+    <PackageTags>Widgets; ConsoleApps</PackageTags>
   </PropertyGroup>
 
 </Project>

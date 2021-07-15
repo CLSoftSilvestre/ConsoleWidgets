@@ -146,7 +146,7 @@ namespace ConsoleWidgets
             tbl1.AddColumn(20, "Telefone");
 
             //Adicionar as linhas à tabela
-            for (int x = 0; x < 20; x++)
+            for (int x = 0; x < 50; x++)
             {
                 Row linha = new Row();
                 linha.AddColumn(30, "Celso " + x);
@@ -173,7 +173,11 @@ namespace ConsoleWidgets
             e.Add(frm1);
             e.Render();
 
-            tbl1.Select();
+            string seleccao = tbl1.Select();
+
+            MsgBox retorno = new MsgBox("Item selecionado", $"O item selecionado foi {seleccao}");
+            retorno.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
+            retorno.Show(e);
 
             // Gestão da alternação entre botoes e resposta
             string resp = new string("");

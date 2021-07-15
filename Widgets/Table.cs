@@ -12,6 +12,8 @@ namespace Widgets
 
         private int _selPos = 1;
         private int _maxItems = 1;
+        private int _actualPag = 1;
+        private int _totalPag = 1;
 
         public List<Row> TableRows { get; set; } = new List<Row>();
         public Header TableHeaders { get; set; } = new Header();
@@ -26,7 +28,7 @@ namespace Widgets
             Height = height;
             _parentScreen = e;
 
-            //Definir o maximo de item em simultaneo na tabela (sem paginação)
+            //Definir o maximo de item em simultaneo na tabela (sem contar com paginação)
             _maxItems = Height - 4;
 
         }
@@ -39,6 +41,7 @@ namespace Widgets
         public void AddRow(Row data)
         {
             TableRows.Add(data);
+            _totalPag = (TableRows.Count / _maxItems) + 1;
         }
 
         public override void Draw(Screen e)
@@ -50,6 +53,9 @@ namespace Widgets
 
             //Desenhar Linha
             e.DrawSepLine(X, Y+2, Lenght, FontColor, BorderType.Single, BackgroundColor);
+
+            //Desenhar dados pa paginação
+            e.DrawText(X + Lenght - 20, Y + Height - 1, $"[ Pagina {_actualPag} de {_totalPag}. ]", ConsoleColor.White, ConsoleColor.DarkBlue);
 
             int posx = 0;
             int count = 1;
@@ -87,12 +93,19 @@ namespace Widgets
                         if (linhaTab == _selPos)
                         {
                             //Escrever cada campo de texto (Célula) na cor invertida
-                            e.DrawText(X + 2 + posx, Y + 3 + linha, TableRows[linha].Columns[coluna].Title, BackgroundColor, FontColor);
+                            if (((_actualPag - 1) * _maxItems) + linha < TableRows.Count)
+                            {
+                                e.DrawText(X + 2 + posx, Y + 3 + linha, TableRows[((_actualPag - 1) * _maxItems) + linha].Columns[coluna].Title, BackgroundColor, FontColor);
+
+                            }
                         }
                         else
                         {
                             //Escrever cada campo de texto (Célula) na cor normal
-                            e.DrawText(X + 2 + posx, Y + 3 + linha, TableRows[linha].Columns[coluna].Title, FontColor, BackgroundColor);
+                            if (((_actualPag - 1) * _maxItems) + linha < TableRows.Count)
+                            {
+                                e.DrawText(X + 2 + posx, Y + 3 + linha, TableRows[((_actualPag - 1) * _maxItems) + linha].Columns[coluna].Title, FontColor, BackgroundColor);
+                            }
                         }
                             
                         posx += TableRows[linha].Columns[coluna].Size;
@@ -119,9 +132,23 @@ namespace Widgets
                         if (_selPos > 1)
                             _selPos -= 1;
                         break;
+                    case ConsoleKey.PageDown:
+                        //Next page of pagination
+                        if(_actualPag < _totalPag)
+                        {
+                            _actualPag += 1;
+                        }
+                        break;
+                    case ConsoleKey.PageUp:
+                        // Previous page of pagination
+                        if (_actualPag > 1)
+                        {
+                            _actualPag -= 1;
+                        }
+                        break;
                     case ConsoleKey.Enter:
-                        //Retorna o valor selecionado (TODO... Retornar)
-                        return null;
+                        //Retorna o valor da primeira coluna do objecto selecionado.
+                        return TableRows[((_actualPag - 1) * _maxItems) + _selPos - 1].Columns[0].Title;
                     case ConsoleKey.Tab:
                         //Sai e avança para proximo controlo
                         return null;
