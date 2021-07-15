@@ -47,7 +47,7 @@ namespace ConsoleWidgets
             menuItens.Add(Sair);
 
             // Criar um menu adicionar a lista de items.
-            Menu mnu = new Menu("Menu de teste", menuItens);
+            Menu mnu = new Menu("Menu de teste da aplicação", menuItens);
             // Define as cores a utilizar pelo Menu
             mnu.SetColors(ConsoleColor.White, ConsoleColor.DarkBlue);
             // Adiciona o Menu criado ao objecto Screen geral

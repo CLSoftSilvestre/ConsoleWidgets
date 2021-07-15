@@ -20,18 +20,26 @@ namespace Widgets
         {
             Title = title;
             Itens = itens;
+
+            //Hard Coded position
+            X = 35;
+            Y = 10;
+            Lenght = 50;
+            Height = 10;
         }
 
         public override void Draw(Screen e)
         {
             parentScreen = e;
-            e.DrawBackground(35, 10, 50, 10, BackgroundColor, BackgroundType.Space);
-            e.DrawBox(35, 10, 50, 10, FontColor, BorderType.Double, BackgroundColor);
+            e.DrawBackground(X, Y, Lenght, Height, BackgroundColor, BackgroundType.Space);
+            e.DrawBox(X, Y, Lenght, Height, FontColor, BorderType.Double, BackgroundColor);
             //Desenhar barra de item selecionado
-            e.DrawBackground(40, 12 + _selPos, 40, 1, FontColor, BackgroundType.Space);
-            e.DrawSepLine(35, 12, 50, FontColor, BorderType.Double, BackgroundColor);
+            e.DrawBackground(X+5, Y + 2 + _selPos, Lenght - 10, 1, FontColor, BackgroundType.Space);
+            e.DrawSepLine(X, Y+2, Lenght, FontColor, BorderType.Double, BackgroundColor);
             //Desenhar titulo do menu (Vai ser alterado para componente Widget)
-            e.DrawText(55, 11, Title.ToUpper(), FontColor, BackgroundColor);
+            int tempx = (X + (Lenght / 2)) - ((Title.Length) / 2);
+            e.DrawText(tempx, Y+1, Title.ToUpper(), FontColor, BackgroundColor);
+
             //Desenhar opções do menu (Vai ser alterado para componente Widget)
             int pos = 12;
             foreach (var item in Itens)
