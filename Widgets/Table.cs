@@ -148,7 +148,11 @@ namespace Widgets
                         break;
                     case ConsoleKey.Enter:
                         //Retorna o valor da primeira coluna do objecto selecionado.
-                        return TableRows[((_actualPag - 1) * _maxItems) + _selPos - 1].Columns[0].Title;
+                        if (((_actualPag - 1) * _maxItems) + _selPos <= TableRows.Count)
+                            return TableRows[((_actualPag - 1) * _maxItems) + _selPos - 1].Columns[0].Title;
+                        else
+                            return null;
+                        
                     case ConsoleKey.Tab:
                         //Sai e avança para proximo controlo
                         return null;
